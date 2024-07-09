@@ -48,7 +48,7 @@ return 'hello';
       <ul>
         {data.map((item, index) => (
         <>
-          <li key={index}>{item.name}</li>
+          <li className="pokemon-container" key={index}>{item.name}</li>
           <p>{getPokeid(item.url)}</p>
         </>
         ))}
