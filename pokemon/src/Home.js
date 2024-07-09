@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
- 
+ import Card from "./Card";
 function App() {
   const [id, setId] = useState(0);
   const [allPokemon, setAllPokemon] = useState([]);
@@ -8,7 +8,7 @@ function App() {
   useEffect(() => {
     fetch("https://pokeapi.co/api/v2/pokemon/?limit=1302")
       .then((res) => res.json()) //saving results in JSON
-      .then((data) => setAllPokemon(data.results)); //slapping whatever data we get into the array !
+      .then((data) => setAllPokemon(data.results)); 
   });
  
   return (
@@ -28,19 +28,7 @@ function App() {
   );
 }
  
-function Card({ pokemon }) {
-  const [id, setID] = useState(
-    pokemon.url.split("/")[pokemon.url.split("/").length - 2]
-  );
-  const [stats, setStats] = useState();
-  useEffect(() => {
-    fetch(`https://pokeapi.co/api/v2/pokemon/${id}`)
-      .then((res) => res.json())
-      .then((data) => {
-        setStats(data);
-        // return data;
-      });
-  }, []);
+
   // const PokeStats = url.split("/")[url.split("/").length - 2];
  
   const getPokePics = (url) => {
@@ -60,6 +48,6 @@ if(stats==null){
       ></img>
     </div>
   );
-}
+
  
 export default App;
