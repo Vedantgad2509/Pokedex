@@ -5,7 +5,7 @@ function App() {
   const [allPokemon, setAllPokemon] = useState([]);
   const [displayedPokemon, setDisplayedPokemon] = useState([]);
   const [loading, setLoading] = useState(false);
-  const [index, setIndex] = useState(0);
+  const [index, setIndex] = useState(20);
 
   const fetchAllPokemon = () => {
     setLoading(true);
