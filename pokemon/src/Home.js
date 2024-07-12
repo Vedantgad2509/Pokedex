@@ -1,91 +1,108 @@
-import React, { useState, useEffect } from "react";
-import './index.css';
+import './App.css';
+import React, { useState, useEffect } from 'react';
+import Navbar from './navbar';
+import {motion} from "framer-motion";
+
+
 
 function App() {
-  const [allPokemon, setAllPokemon] = useState([]);
-  const [displayedPokemon, setDisplayedPokemon] = useState([]);
+  const [id, setID] = useState(1);
+  const [name, setName] = useState("");
+  const [stats, setStats] = useState([]);
   const [loading, setLoading] = useState(false);
-  const [index, setIndex] = useState(20);
+  const [error, setError] = useState("");
+  
 
-  const fetchAllPokemon = () => {
-    setLoading(true);
-    fetch(`https://pokeapi.co/api/v2/pokemon?offset=1&limit=1302`)
-      .then((res) => res.json())
-      .then((data) => {
-        setAllPokemon(data.results);
-        setDisplayedPokemon(data.results.slice(0, 20));
+  useEffect(() => {
+    const fetchPokemon = async () => {
+      setLoading(true);
+      setError("");
+      try {
+        const response = await fetch(`https://pokeapi.co/api/v2/pokemon/${id}`);
+        if (!response.ok) throw new Error('Could not fetch API !');
+        const data = await response.json();
+        setName(data.name);
+        setStats(data.stats);
+      } catch (err) {
+        setError(err.message);
+      } finally {
         setLoading(false);
-      });
-  };
-
-  const loadMorePokemon = () => {
-    const newIndex = index + 20;
-    setDisplayedPokemon((prev) => [
-      ...prev,
-      ...allPokemon.slice(index, newIndex),
-    ]);
-    setIndex(newIndex);
-  };
-
-  useEffect(() => {
-    fetchAllPokemon();
-  }, []);
-
-  return (
-    <div className="app-container">
-      <h1>Pokedex</h1>
-      <div className="pokemon-container">
-        <div className="all-container">
-          <ul>
-            {displayedPokemon.map((pokemon, index) => (
-              <Card key={index} pokemon={pokemon} />
-            ))}
-          </ul>
-        </div>
-        {loading ? (
-          <div>Loading...</div>
-        ) : (
-          <button className="load-more" onClick={loadMorePokemon}>
-            Load More!
-          </button>
-        )}
-      </div>
-    </div>
-  );
-}
-
-function Card({ pokemon }) {
-  const id = pokemon.url.split("/")[pokemon.url.split("/").length - 2];
-  const [stats, setStats] = useState(null);
-
-  useEffect(() => {
-    fetch(`https://pokeapi.co/api/v2/pokemon/${id}`)
-      .then((res) => res.json())
-      .then((data) => {
-        setStats(data);
-      });
+      }
+    };
+    fetchPokemon();
   }, [id]);
 
-  const getPokePics = () => {
+  const handleNext = () => {
+    setID((prevID) => prevID + 1);
+  };
+
+  const handleBack = () => {
+    setID((prevID) => (prevID > 1 ? prevID - 1 : 1));
+  };
+
+  const handlePictures = (id) => {
     return `https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/dream-world/${id}.svg`;
   };
 
-  if (!stats) {
-    return null;
-  }
-
   return (
-    <li>
-      <div className="Pokemon-List">{pokemon.name}</div>
-      {stats.stats.map((x, index) => (
-        <div key={index}>{x.stat.name}: {x.base_stat}</div>
-      ))}
-      <img
-        src={getPokePics()}
-        alt={pokemon.name}
-        style={{ height: "4rem", width: "auto" }}
-      />
-    </li>
+    <motion.div animate={{x: [0, 100, 0]}}className="container">
+      
+      {loading && <p>Loading...</p>}
+      {error && <p>{error}</p>}
+      {!loading && !error && (
+        <motion.div animate={{
+          scale: [1, 1, 1, 1, 1],
+          rotateY: [1, 180,0],
+          // borderRadius: ["0%", "0%", "50%", "50%", "0%"]
+        }}
+        transition={{
+          duration: 2,
+          ease:"backOut",
+          times: [0, 0.2, 0.5, 0.8, 1],
+          repeat: onabort,
+          repeatDelay: 1
+        }} className="pokemon-card">
+          <div>
+           
+            <p className="title">{name.toUpperCase()}</p>
+            {stats.map((x) => (
+              <div key={x.stat.name}>
+                <strong>{x.stat.name.toUpperCase()}: </strong>
+                <div className="stat-bar" style={{ width: `${x.base_stat}px` }}>{x.base_stat}</div>
+              </div>
+            ))}
+          </div>
+          <img
+            src={handlePictures(id)}
+            alt={name}
+            className="pokemon-image"
+          />
+        </motion.div>
+      )}
+      <div className="button-container">
+        
+        
+         <motion.button
+           whileHover={{
+         scale: 1.2,
+         transition: { duration: 1 },
+         }}
+          whileTap={{ scale: 0.9 }}
+          onTap={handleBack} disabled={id === 1}>
+              Previous Pokémon
+           </motion.button>
+
+           <motion.button
+            whileHover={{
+            scale: 1.2,
+            transition: { duration: 1 },
+             }}
+            whileTap={{ scale: 0.9 }}
+            onTap={handleNext} disabled={id === 1}>
+              Next Pokémon
+           </motion.button>
+      </div>
+    </motion.div>
   );
 }
 
