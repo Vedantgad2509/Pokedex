@@ -84,7 +84,7 @@ function App() {
         
          <motion.button
            whileHover={{
-         scale: 1.2,
+         scale: 0.8,
          transition: { duration: 1 },
          }}
           whileTap={{ scale: 0.9 }}
@@ -94,15 +94,16 @@ function App() {
 
            <motion.button
             whileHover={{
-            scale: 1.2,
+            scale: 0.8,
             transition: { duration: 1 },
              }}
             whileTap={{ scale: 0.9 }}
-            onTap={handleNext} disabled={id === 1}>
+            onTap={handleNext} disabled={id >=1302}>
               Next Pokémon
            </motion.button>
       </div>
     </motion.div>
+    
   );
 }
 
