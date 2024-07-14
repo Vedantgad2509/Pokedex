@@ -1,6 +1,6 @@
 import './App.css';
 import React, { useState, useEffect } from 'react';
-import Navbar from './navbar';
+
 import {motion} from "framer-motion";
 
 

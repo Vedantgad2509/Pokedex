@@ -2,7 +2,7 @@ import Home from './Home';
 import './App.css'
 import './index.css'
 import Navbar from './navbar'
-import Star from './components/star';
+
 
 
 function App() {
@@ -13,7 +13,7 @@ function App() {
      
       <Home/>
       <div>
-      <Star/>
+      
     </div>
       
     </div>
