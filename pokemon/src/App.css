@@ -12,12 +12,13 @@ body {
   box-sizing: border-box; 
 }
 
-.container {
+.container_x {
   display: flex;
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  min-height :65.1vh;
+  /* min-height :65.1vh; */
+  height: 100vh;
   border-radius: 30px;
   overflow: auto; 
 }

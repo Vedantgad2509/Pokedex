@@ -8,13 +8,11 @@ import Navbar from './navbar'
 function App() {
   
   return (
-    <div style={{background:'#212121',color:"white",height:'100vh'}} className="Home">
+    <div style={{background:'#212121',color:"white"}} className="Home">
       <Navbar/>
      
       <Home/>
-      <div>
-      
-    </div>
+    
       
     </div>
     

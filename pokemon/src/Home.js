@@ -86,7 +86,7 @@ function App() {
   };
 
   return (
-    <div className="container">
+    <div className="container_x">
       {loading && <p>Loading...</p>}
       {error && <p>{error}</p>}
       {!loading && !error && (
@@ -95,6 +95,11 @@ function App() {
           animate={{ opacity: 1 }}
           exit={{ opacity: 0 }}
           className="pokemon-card"
+          whileHover={{ rotateY: 180 }} 
+          transition={{
+            duration: 0.6, 
+            ease: "easeInOut"
+          }}
         >
           <div>
             <p className="title">{name.toUpperCase()}</p>
@@ -129,13 +134,16 @@ function App() {
         <motion.button
           whileHover={{ scale: 0.8 }}
           whileTap={{ scale: 0.9 }}
-          onTap={handleBack} disabled={id === 1}>
+          onTap={handleBack} 
+          disabled={id === 1}
+        >
           Previous Pokémon
         </motion.button>
         <motion.button
           whileHover={{ scale: 0.8 }}
           whileTap={{ scale: 0.9 }}
-          onTap={handleNext}>
+          onTap={handleNext}
+        >
           Next Pokémon
         </motion.button>
       </div>
