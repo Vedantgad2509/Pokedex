@@ -9,6 +9,7 @@ function App() {
   const [types, setTypes] = useState([]);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
+  const [searchTerm, setSearchTerm] = useState("");
 
   useEffect(() => {
     const fetchPokemon = async () => {
@@ -85,8 +86,42 @@ function App() {
     }
   };
 
+  const handleSearch = async () => {
+    setLoading(true);
+    setError("");
+    try {
+      const response = await fetch(`https://pokeapi.co/api/v2/pokemon/${searchTerm.toLowerCase()}`);
+      if (!response.ok) throw new Error('Could not fetch API!');
+      const data = await response.json();
+      setID(data.id);
+      setName(data.name);
+      setStats(data.stats);
+      setTypes(data.types.map(typeInfo => typeInfo.type.name));
+      setSearchTerm("");
+    } catch (err) {
+      setError(err.message);
+    } finally {
+      setLoading(false);
+    }
+  };
+
   return (
     <div className="container_x">
+      <div className="search-bar">
+        <input 
+          type="text" 
+          value={searchTerm}
+          onChange={(e) => setSearchTerm(e.target.value)}
+          placeholder="Search Pokémon by name or ID" 
+        />
+        <motion.button
+          whileHover={{ scale: 1.1 }}
+          whileTap={{ scale: 0.9 }}
+          onClick={handleSearch}
+        >
+          Search
+        </motion.button>
+      </div>
       {loading && <p>Loading...</p>}
       {error && <p>{error}</p>}
       {!loading && !error && (
@@ -149,8 +184,6 @@ function App() {
       </div>
     </div>
   );
-
-  
 }
 
 export default App;
